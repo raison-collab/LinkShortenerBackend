@@ -39,7 +39,7 @@ services:
     env_file:
       - .env
     ports:
-      - "${APP_PORT}:8080"
+      - "${APP_PORT}:${APP_PORT}"
     depends_on:
       postgres:
         condition: service_healthy

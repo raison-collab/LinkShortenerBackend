@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS links (
 -- Create indexes
 CREATE INDEX idx_links_short_code ON links(short_code);
 CREATE INDEX idx_links_user_id ON links(user_id);
-CREATE INDEX idx_links_is_active ON links(is_active);
 CREATE INDEX idx_links_expires_at ON links(expires_at);
 CREATE INDEX idx_links_created_at ON links(created_at);
 
