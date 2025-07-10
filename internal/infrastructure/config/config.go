@@ -1,12 +1,14 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
 
 	"github.com/joho/godotenv"
+	"github.com/raison-collab/LinkShorternetBackend/pkg/logger"
 )
 
 // Config holds all configuration for our application
@@ -134,6 +136,27 @@ func Load() (*Config, error) {
 			Output:   getEnv("LOG_OUTPUT", "console"),
 			FilePath: getEnv("LOG_FILE_PATH", ""),
 		},
+	}
+
+	log := logger.NewWithConfig(logger.Config{
+		Level:    config.Log.Level,
+		Format:   config.Log.Format,
+		Output:   logger.LogOutput(config.Log.Output),
+		FilePath: config.Log.FilePath,
+	})
+
+	// Прячем пароли
+	configCopy := *config
+	configCopy.Database.Password = "[MASKED]"
+	configCopy.Redis.Password = "[MASKED]"
+	configCopy.JWT.Secret = "[MASKED]"
+
+	// Конвертируем конфиг в JSON для логирования
+	configJSON, err := json.MarshalIndent(configCopy, "", "  ")
+	if err != nil {
+		log.Warnf("Failed to marshal config for debug logging: %v", err)
+	} else {
+		log.Debugf("Loaded configuration: %s", string(configJSON))
 	}
 
 	return config, nil
