@@ -436,3 +436,25 @@ make migrate-up
 # Полная настройка среды разработки
 make dev-setup
 ```
+
+## Тестирование
+
+- **Unit-тесты**: Комплексные unit-тесты с использованием Testify и моков. Покрытие: >80%.
+- **Тесты безопасности (SAST)**: Автоматизированный статический анализ кода на уязвимости с помощью:
+  - **Gosec**: Специализированный для Golang, проверяет на hardcoded credentials, слабую криптографию и т.д.
+  - **Semgrep**: Универсальный инструмент с правилами для Golang (p/golang).
+  - **CodeQL**: GitHub-native семантический анализ для выявления уязвимостей.
+
+  Workflow: `.github/workflows/security.yml`. Запускается на push в main и pull_request в main. Результаты в GitHub Security tab (для CodeQL).
+
+  Локальный запуск (сейчас не реализовано, работает только в среде гитхаб):
+  - Gosec: `gosec ./...`
+  - Semgrep: `semgrep scan --config=p/golang ./...`
+  - CodeQL: Через CLI (codeql database create и analyze).
+
+### Запуск тестов
+
+```bash
+# Запустить unit тесты
+go test ./...
+```
