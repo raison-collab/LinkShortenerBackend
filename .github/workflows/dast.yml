@@ -89,6 +89,15 @@ jobs:
         with:
           target: 'http://localhost:8080'
           cmd_options: '-J report_json.json -w report_md.md -r report_html.html --no-issue'
+      - name: Check if SARIF exists
+        id: check-sarif
+        if: always()
+        run: |
+          if [ -f "zap.sarif" ]; then
+            echo "sarif_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "sarif_exists=false" >> $GITHUB_OUTPUT
+          fi
       - name: Upload ZAP Reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -98,8 +107,8 @@ jobs:
             report_json.json
             report_md.md
             report_html.html
-      - name: Upload ZAP SARIF (if generated)
-        if: always() && exists('zap.sarif')
+      - name: Upload ZAP SARIF
+        if: always() && steps.check-sarif.outputs.sarif_exists == 'true'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: zap.sarif
