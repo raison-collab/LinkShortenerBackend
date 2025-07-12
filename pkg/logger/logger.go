@@ -82,10 +82,10 @@ func NewWithConfig(cfg Config) Logger {
 
 		// Создаем директорию если не существует
 		dir := filepath.Dir(cfg.FilePath)
-		if err := os.MkdirAll(dir, 0755); err != nil {
+		if err := os.MkdirAll(dir, 0750); err != nil {
 			log.Printf("Failed to create log directory: %v", err)
 		} else {
-			file, err := os.OpenFile(cfg.FilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+			file, err := os.OpenFile(cfg.FilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
 			if err != nil {
 				log.Printf("Failed to open log file: %v", err)
 			} else {
@@ -206,4 +206,3 @@ func (l *logger) Fatalf(format string, args ...interface{}) {
 	l.logMessage("FATAL", fmt.Sprintf(format, args...))
 	os.Exit(1)
 }
- 
