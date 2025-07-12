@@ -59,6 +59,7 @@ type JWTConfig struct {
 type URLConfig struct {
 	BaseURL        string
 	ShortURLLength int
+	APIHost        string // Host for API documentation
 }
 
 // CORSConfig holds CORS configuration
@@ -120,6 +121,7 @@ func Load() (*Config, error) {
 		URL: URLConfig{
 			BaseURL:        getEnv("BASE_URL", "http://localhost:8080"),
 			ShortURLLength: getEnvAsInt("SHORT_URL_LENGTH", 6),
+			APIHost:        getEnv("API_HOST", "localhost:8080"),
 		},
 		CORS: CORSConfig{
 			AllowOrigins: getEnvAsStringSlice("CORS_ALLOW_ORIGINS", []string{"*"}),

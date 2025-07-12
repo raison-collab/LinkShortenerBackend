@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/raison-collab/LinkShorternetBackend/docs" // импорт swagger документации https://github.com/swaggo/swag
+	swaggerDocs "github.com/raison-collab/LinkShorternetBackend/docs" // импорт swagger документации https://github.com/swaggo/swag
 	"github.com/raison-collab/LinkShorternetBackend/internal/delivery/http/router"
 	"github.com/raison-collab/LinkShorternetBackend/internal/infrastructure/config"
 	"github.com/raison-collab/LinkShorternetBackend/internal/infrastructure/database"
@@ -34,6 +34,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
+
+	// Update Swagger host information dynamically
+	swaggerDocs.SwaggerInfo.Host = cfg.URL.APIHost
 
 	// logger
 	log := logger.NewWithConfig(logger.Config{
